@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro de Ingreso / Salida</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+    .readonly {
+      background-color: white;
+    }
+    #hora {
+      font-weight: bold;
+      color: #333;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button[type="submit"] {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 16px;
+      z-index: 10;
+      position: relative;
+    }
+    .logo {
+      max-width: 50px;
+      margin-bottom: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Google Sign-In -->
+  <div id="g_id_onload"
+      data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="true">
+  </div>
+
+  <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left">
+  </div>
+
+  <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
+
+  <div class="container">
+    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
+    <h2>Registro de Ingreso / Salida</h2>
+
+    <form id="secure-form" method="POST" action="https://docs.google.com/forms/d/e/1k6tfBsi9CjNJWgzuAejKUjBoYEnbI445Jp2Xt0YSQ_E/formResponse" target="_self">
+      <label for="nombre">Nombre:</label>
+      <select id="nombre" name="entry.7241129" required>
+        <option value="" disabled selected>Seleccione un nombre</option>
+       
+	
+	
+	<option value="ARFFY ALONSO">ALONSO PINILLA ARFFY KAROLAINN</option>
+	<option value="FRANCINETH BEDOYA">BEDOYA HOYOS FRANCINETH</option>
+	<option value="ANGIE BELTRAN">BELTRAN HERRERA ANGIE TATIANA</option>
+	<option value="PAULA PIMIENTA">BELTRAN PIMIENTA PAULA ANDREA</option>
+	<option value="DAVID BENAVIDES">BENAVIDES AREVALO DAVID FELIPE</option>
+	<option value="ANGIE BERMEO">BERMEO  QUINTERO ANGIE PAOLA</option>
+	<option value="MARTHA CANO">CANO OCAMPO MARTHA LILIANA</option>
+	<option value="ADRIANA CARDENAS">CARDENAS HERNANDEZ LUZ ADRIANA</option>
+	<option value="JAIR CARREÑO">CARREÑO VEGA JAIR SANTIAGO</option>
+	<option value="DIOMEDES CASTAÑEDA">CASTAÑEDA PRIETO DIOMEDES </option>
+	<option value="BRAYAN CASTELLANOS">CASTELLANOS PRADA BRAYAN AUGUSTO</option>
+	<option value="VERONIKA CUBILLOS">CUBILLOS TELLEZ VERONIKA LORENA</option>
+	<option value="MARIA DAZA">DAZA MARTINEZ MARIA PAULA</option>
+	<option value="STEFANI DIAZ">DIAZ MENGUAN STEFANI</option>
+	<option value="LAURA GARCIA">GARCIA QUEBRAOLLA LAURA VALENTINA </option>
+	<option value="YENNY HERNANDEZ">HERNANDEZ BARRERA YENNY</option>
+	<option value="DANNA BELTRAN">HORMAZA BERNAL DANNA STEFANY </option>
+	<option value="NIDIA MARIN">MARIN BARRIOS NIDIA MARYORI</option>
+	<option value="SONIA MARTINEZ">MARTINEZ MARTIN SONIA RAQUEL</option>
+	<option value="GABRIEL MARTINEZ">MARTÍNEZ ORTEGA GABRIEL ANDRÉS</option>
+	<option value="LEIDY MENDOZA">MENDOZA GARCÍA LEIDY JULIETH</option>
+	<option value="ANYI MERCHAN">MERCHÁN CADENA ANYI CATALINA</option>
+	<option value="YUDY MORA">MORA VEGA YUDY</option>
+	<option value="SEBASTIAN MUÑOZ">MUÑOZ MÉNDEZ SEBASTIÁN FELIPE</option>
+	<option value="LEIDER PALOMO">PALOMO MANOSALVA LEIDER ALEJANDRO</option>
+	<option value="JEIMMY PEÑA">PEÑA VACA JEIMMY MILENA</option>
+	<option value="SAMIR PINEDA">PINEDA LASSO SAMIR</option>
+	<option value="ADRIANA PINZON">PINZON  ADRIANA </option>
+	<option value="YULI QUIROGA">QUIROGA MUÑOZ YULI ANDREA</option>
+	<option value="DANIEL RAMIREZ">RAMIREZ VILLAMIL DANIEL FELIPE</option>
+	<option value="NATALIA RATIVA">RATIVA CONTRERAS NATALIA </option>
+	<option value="ANDREA REDONDO">REDONDO AGUDELO ANDREA LILIANA</option>
+	<option value="MIREYA RODRIGUEZ">RODRIGUEZ JIMENEZ MIREYA</option>
+	<option value="NICOLAS ROMERO">ROMERO QUINTERO NICOLAS</option>
+	<option value="EDWARD RONDON">RONDON MARTINEZ EDWARD SMIT</option>
+	<option value="DIANA SANCHEZ">SANCHEZ RAMIREZ DIANA  MARCELA</option>
+	<option value="DIANA SIERRA">SIERRA ZAPATA DIANA MILENA</option>
+	<option value="LOREN TAVERA">TAVERA QUIROZ LOREN STEFANY</option>
+	<option value="ANDERSON VARGAS">VARGAS ARANGO ANDERSON </option>
+	<option value="DANNA VARGAS">VARGAS ARANGO DANNA MARLEY</option>
+	<option value="MICHAEL VARGAS">VARGAS CASAS MICHAEL LEONARDO</option>
+	<option value="CAMILO VARGAS">VARGAS PABON CAMILO ANDRES</option>
+	
+
+     </select>
+
+      <label for="proceso">Proceso:</label>
+      <input type="text" id="proceso" name="entry.1170449751" placeholder="------" readonly required>
+
+      <label for="tipo">Tipo de registro:</label>
+      <select id="tipo" name="entry.933602916" required>
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="Ingreso">Ingreso</option>
+        <option value="Salida">Salida</option>
+      </select>
+
+      <label for="ubicacion">Ubicación:</label>
+      <input type="text" id="ubicacion" name="entry.2081593853" readonly placeholder="Detectando ubicación..." required>
+
+      <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="entry.1926819478" class="readonly" readonly required>
+
+      <label>Hora actual:</label>
+      <div id="hora"></div>
+
+      <button type="submit">Enviar registro</button>
+    </form>
+  </div>
+
+  <script>
+    // Geolocalización
+    function obtenerUbicacion() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          document.getElementById('ubicacion').value = lat + "," + lon;
+        }, function(error) {
+          document.getElementById('ubicacion').value = "Error: " + error.message;
+        });
+      } else {
+        document.getElementById('ubicacion').value = "Geolocalización no soportada";
+      }
+    }
+    window.onload = obtenerUbicacion;
+
+    // Asignar proceso según nombre
+    const procesos = {
+	    
+      "ARFFY ALONSO": "Activos.",
+      "FRANCINETH BEDOYA": "Activos.",
+      "ANGIE BELTRAN": "Activos.",
+      "PAULA PIMIENTA": "Activos.",
+      "ADRIANA CARDENAS": "Activos.",
+      "LAURA GARCIA": "Activos.",
+      "YENNY HERNANDEZ": "Activos.",
+      "SONIA MARTINEZ": "Activos.",
+      "GABRIEL MARTINEZ": "Activos.",
+      "LEIDY MENDOZA": "Activos.",
+      "ANYI MERCHAN": "Activos.",
+      "YUDY MORA": "Activos.",
+      "SEBASTIAN MUÑOZ": "Activos.",
+      "LEIDER PALOMO": "Activos.",
+      "DANIEL RAMIREZ": "Activos.",
+      "NICOLAS ROMERO": "Activos.",
+      "EDWARD RONDON": "Activos.",
+      "ANDERSON VARGAS": "Activos.",
+      "CAMILO VARGAS": "Activos.",
+	"MICHAEL VARGAS": "Activos.",
+
+
+
+	"DAVID BENAVIDES": "Hipotecario.",
+	"ANGIE BERMEO": "Hipotecario.",
+	"MARTHA CANO": "Hipotecario.",
+	"JAIR CARREÑO": "Hipotecario.",
+	"DIOMEDES CASTAÑEDA": "Hipotecario.",
+	"BRAYAN CASTELLANOS": "Hipotecario.",
+	"VERONIKA CUBILLOS": "Hipotecario.",
+	"MARIA DAZA": "Hipotecario.",
+	"STEFANI DIAZ": "Hipotecario.",
+	"DANNA BELTRAN": "Hipotecario.",
+	"NIDIA MARIN": "Hipotecario.",
+	"JEIMMY PEÑA": "Hipotecario.",
+	"SAMIR PINEDA": "Hipotecario.",
+	"ADRIANA PINZON": "Hipotecario.",
+	"YULI QUIROGA": "Hipotecario.",
+	"NATALIA RATIVA": "Hipotecario.",
+	"MIREYA RODRIGUEZ": "Hipotecario.",
+	"DIANA SANCHEZ": "Hipotecario.",
+	"DIANA SIERRA": "Hipotecario.",
+	"LOREN TAVERA": "Hipotecario.",
+	"DANNA VARGAS": "Hipotecario.",
+		    
+    };
+    document.getElementById("nombre").addEventListener("change", function () {
+      const nombre = this.value;
+      document.getElementById("proceso").value = procesos[nombre] || "";
+    });
+
+    // Hora actual
+    function actualizarHora() {
+      const ahora = new Date();
+      const horaFormateada = ahora.toLocaleTimeString();
+      document.getElementById("hora").textContent = horaFormateada;
+    }
+    setInterval(actualizarHora, 1000);
+    actualizarHora();
+
+    // Capturar respuesta de Google
+    function handleCredentialResponse(response) {
+      const data = jwt_decode(response.credential);
+      const correo = data.email;
+      const nombre = data.name;
+
+      document.getElementById("correo").value = correo;
+      document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombre + " (" + correo + ")";
+      document.querySelector(".g_id_signin").style.display = "none";
+    }
+
+    // Validación y envío
+    document.getElementById('secure-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const ubicacion = document.getElementById('ubicacion').value;
+      const correo = document.getElementById('correo').value;
+
+      if (!correo) {
+        alert("Por favor, inicia sesión con Google antes de enviar.");
+        return;
+      }
+
+      if (!ubicacion || ubicacion.includes("Error") || ubicacion === "Geolocalización no soportada") {
+        alert("Espere que se cargue la ubicación antes de enviar.");
+        return;
+      }
+
+      const data = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: data
+      }).then(() => {
+        alert("Registro enviado correctamente.");
+        form.reset();
+        document.getElementById("usuarioLogueado").textContent = "";
+        location.reload();
+      });
+    });
+  </script>
+
+</body>
+</html>
