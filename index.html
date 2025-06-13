@@ -35,9 +35,9 @@
 </head>
 <body>
 
-  <!-- Google Sign-In -->
+ <!-- Google Sign-In -->
   <div id="g_id_onload"
-      data-client_id="913694-nkf9acf2ogomq1.apps.googleusercontent.com"
+      data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
       data-context="signin"
       data-ux_mode="popup"
       data-callback="handleCredentialResponse"
@@ -55,37 +55,36 @@
 
   <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
 
-  <div class="container">
-    <img src="https://sitcarsa.github.io/rc/LOGO.png" alt="Logo de la empresa" class="logo">
+ <div class="container">
+    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
     <h2>Registro de Ingreso / Salida</h2>
 
-    <form id="secure-form" method="POST"
-      action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0VS-jhYg/formResponse" target="_self">
-      
+    <form id="secure-form" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse" target="_self">
       <label for="nombre">Nombre:</label>
-      <select id="nombre" name="entry.1782" required>
+      <select id="nombre" name="entry.1728467182" required>
         <option value="" disabled selected>Seleccione un nombre</option>
+
         <option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
         <option value="LUIS ALVARADO">LUIS EDUARDO ALVARADO</option> 
         <option value="Giovanni Cervantes">Giovanni Cervantes</option> 
         <option value="Maximo de La Torre">Maximo de La Torre</option> 
-      </select>
-
+ </select>
       <label for="proceso">Proceso:</label>
-      <input type="text" id="proceso" name="entry.1784" placeholder="------" readonly required>
+      <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
 
-      <label for="tipo">Tipo de registro:</label>
-      <select id="tipo" name="entry.8847" required>
+  <label for="tipo">Tipo de registro:</label>
+      <select id="tipo" name="entry.886525947" required>
         <option value="" disabled selected>Seleccione una opción</option>
         <option value="Ingreso">Ingreso</option>
         <option value="Salida">Salida</option>
       </select>
 
       <label for="ubicacion">Ubicación:</label>
-      <input type="text" id="ubicacion" name="entry.4048" readonly placeholder="Detectando ubicación..." required>
+      <input type="text" id="ubicacion" name="entry.404773528" readonly placeholder="Detectando ubicación..." required>
 
-      <label for="correo">Correo electrónico:</label>
-      <input type="email" id="correo" name="entry.5146" class="readonly" readonly required>
+    <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="entry.519463146" class="readonly" readonly required>
+
 
       <label>Hora actual:</label>
       <div id="hora"></div>
