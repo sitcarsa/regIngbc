@@ -138,87 +138,105 @@
   </div>
 
   <script>
-    // Geolocalización
-    function obtenerUbicacion() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const lat = position.coords.latitude.toFixed(6);
-          const lon = position.coords.longitude.toFixed(6);
-          document.getElementById('ubicacion').value = lat + "," + lon;
-        }, function(error) {
-          document.getElementById('ubicacion').value = "Error: " + error.message;
-        });
-      } else {
-        document.getElementById('ubicacion').value = "Geolocalización no soportada";
-      }
-    }
-    window.onload = obtenerUbicacion;
-
-    // Asignar proceso según nombre
-    const procesos = {
-	    
-        "LUIS DIAZ": "Activos",  
-	"MARCOS MARCOS": "Activos",  
-	"Matt Mendoza": "Activos",
-	"Día de Gina": "Activos",
-	"LUIS ALVARADO": "Hipotecario", 
-		    
-    };
-    document.getElementById("nombre").addEventListener("change", function () {
-      const nombre = this.value;
-      document.getElementById("proceso").value = procesos[nombre] || "";
-    });
-
-    // Hora actual
-    function actualizarHora() {
-      const ahora = new Date();
-      const horaFormateada = ahora.toLocaleTimeString();
-      document.getElementById("hora").textContent = horaFormateada;
-    }
-    setInterval(actualizarHora, 1000);
-    actualizarHora();
-
-    // Capturar respuesta de Google
-    function handleCredentialResponse(response) {
-      const data = jwt_decode(response.credential);
-      const correo = data.email;
-      const nombre = data.name;
-
-      document.getElementById("correo").value = correo;
-      document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombre + " (" + correo + ")";
-      document.querySelector(".g_id_signin").style.display = "none";
-    }
-
-    // Validación y envío
-    document.getElementById('secure-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const ubicacion = document.getElementById('ubicacion').value;
-      const correo = document.getElementById('correo').value;
-
-      if (!correo) {
-        alert("Por favor, inicia sesión con Google antes de enviar.");
-        return;
-      }
-
-      if (!ubicacion || ubicacion.includes("Error") || ubicacion === "Geolocalización no soportada") {
-        alert("Espere que se cargue la ubicación antes de enviar.");
-        return;
-      }
-
-      const data = new FormData(form);
-      fetch(form.action, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: data
-      }).then(() => {
-        alert("Registro enviado correctamente.");
-        form.reset();
-        document.getElementById("usuarioLogueado").textContent = "";
-        location.reload();
+  // Geolocalización
+  function obtenerUbicacion() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const lat = position.coords.latitude.toFixed(6);
+        const lon = position.coords.longitude.toFixed(6);
+        document.getElementById('ubicacion').value = lat + "," + lon;
+      }, function(error) {
+        document.getElementById('ubicacion').value = "Error: " + error.message;
       });
-    });
-  </script>
+    } else {
+      document.getElementById('ubicacion').value = "Geolocalización no soportada";
+    }
+  }
+  window.onload = obtenerUbicacion;
 
-</body>
-</html>
+
+
+  // Asignar proceso según nombre
+  const procesos = {
+    "LUIS DIAZ": "Activos.",
+    "LUIS ALVARADO": "Hipotecario."
+  };
+
+
+
+  document.getElementById("nombre").addEventListener("change", function () {
+    const nombre = this.value;
+    document.getElementById("proceso").value = procesos[nombre] || "";
+  });
+
+
+
+  // Hora actual
+  function actualizarHora() {
+    const ahora = new Date();
+    const horaFormateada = ahora.toLocaleTimeString();
+    document.getElementById("hora").textContent = horaFormateada;
+  }
+  setInterval(actualizarHora, 1000);
+  actualizarHora();
+
+  // Capturar respuesta de Google
+  function handleCredentialResponse(response) {
+    const data = jwt_decode(response.credential);
+    const correo = data.email;
+    const nombreCompleto = data.name;
+
+    document.getElementById("correo").value = correo;
+    document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombreCompleto + " (" + correo + ")";
+    document.querySelector(".g_id_signin").style.display = "none";
+
+    const nombreInput = document.getElementById("nombre");
+    const procesoInput = document.getElementById("proceso");
+
+    if (correo === "analista.ti@sitcar-sa.com") {
+      // Establece la opción directamente
+      nombreInput.innerHTML = '<option value="LUIS DIAZ" selected>LUIS EDUARDO DIAZ</option>';
+      nombreInput.disabled = true;
+
+      procesoInput.value = procesos["LUIS DIAZ"];
+    } else {
+      // Restaura select original
+      nombreInput.innerHTML = `
+        <option value="" disabled selected>Seleccione un nombre</option>
+        <option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
+        <option value="LUIS ALVARADO">LUIS EDUARDO ALVARADO</option> 
+      `;
+      nombreInput.disabled = false;
+    }
+  }
+
+  // Validación y envío
+  document.getElementById('secure-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const ubicacion = document.getElementById('ubicacion').value;
+    const correo = document.getElementById('correo').value;
+
+    if (!correo) {
+      alert("Por favor, inicia sesión con Google antes de enviar.");
+      return;
+    }
+
+    if (!ubicacion || ubicacion.includes("Error") || ubicacion === "Geolocalización no soportada") {
+      alert("Espere que se cargue la ubicación antes de enviar.");
+      return;
+    }
+
+    const data = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: data
+    }).then(() => {
+      alert("Registro enviado correctamente.");
+      form.reset();
+      document.getElementById("usuarioLogueado").textContent = "";
+      location.reload();
+    });
+  });
+</script>
