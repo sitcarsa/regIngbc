@@ -77,14 +77,14 @@
 </head>
 <body>
 
-  <!-- Google Sign-In -->
-  <div id="g_id_onload"
+ <div id="g_id_onload"
       data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
       data-context="signin"
       data-ux_mode="popup"
       data-callback="handleCredentialResponse"
       data-auto_prompt="true">
   </div>
+
 
   <div class="g_id_signin"
       data-type="standard"
@@ -97,7 +97,7 @@
 
   <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
 
-  <div class="container">
+ <div class="container">
     <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
     <h2>Registro de Ingreso / Salida</h2>
 
@@ -105,15 +105,15 @@
       <label for="nombre">Nombre:</label>
       <select id="nombre" name="entry.1728467182" required>
         <option value="" disabled selected>Seleccione un nombre</option>
-       	
+       
+
 	<option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
-	<option value="MARCOS MARCOS">MARCOS MARCOS</option>
-	<option value="Matt Mendoza">Matt Mendoza</option>
-	<option value="Día de Gina">Día de Gina</option>
 	<option value="LUIS ALVARADO">LUIS EDUARDO ALVARADO</option> 
+	<option value="Giovanni Cervantes">Giovanni Cervantes</option> 
+	<option value="Maximo de La Torre">Maximo de La Torre</option> 
+	
 
-     </select>
-
+ </select>
       <label for="proceso">Proceso:</label>
       <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
 
@@ -137,83 +137,49 @@
     </form>
   </div>
 
-  <script>
-  // Geolocalización
-  function obtenerUbicacion() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        const lat = position.coords.latitude.toFixed(6);
-        const lon = position.coords.longitude.toFixed(6);
-        document.getElementById('ubicacion').value = lat + "," + lon;
-      }, function(error) {
-        document.getElementById('ubicacion').value = "Error: " + error.message;
-      });
-    } else {
-      document.getElementById('ubicacion').value = "Geolocalización no soportada";
-    }
-  }
-  window.onload = obtenerUbicacion;
 
+<script>
+  let correoAutenticado = "";
 
-
-  // Asignar proceso según nombre
-  const procesos = {
-    "LUIS DIAZ": "Activos.",
-    "LUIS ALVARADO": "Hipotecario."
-  };
-
-
-
-  document.getElementById("nombre").addEventListener("change", function () {
-    const nombre = this.value;
-    document.getElementById("proceso").value = procesos[nombre] || "";
-  });
-
-
-
-  // Hora actual
-  function actualizarHora() {
-    const ahora = new Date();
-    const horaFormateada = ahora.toLocaleTimeString();
-    document.getElementById("hora").textContent = horaFormateada;
-  }
-  setInterval(actualizarHora, 1000);
-  actualizarHora();
-
-  // Capturar respuesta de Google
   function handleCredentialResponse(response) {
     const data = jwt_decode(response.credential);
     const correo = data.email;
-    const nombreCompleto = data.name;
+    const nombre = data.name;
 
+    correoAutenticado = correo;
     document.getElementById("correo").value = correo;
-    document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombreCompleto + " (" + correo + ")";
+    document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombre + " (" + correo + ")";
     document.querySelector(".g_id_signin").style.display = "none";
 
-    const nombreInput = document.getElementById("nombre");
-    const procesoInput = document.getElementById("proceso");
+    limitarOpcionesSegunCorreo(correo);
+  }
 
-    if (correo === "analista.ti@sitcar-sa.com") {
-      // Establece la opción directamente
-      nombreInput.innerHTML = '<option value="LUIS DIAZ" selected>LUIS EDUARDO DIAZ</option>';
-      nombreInput.disabled = true;
+  // Deshabilitar opciones según el correo autenticado
+  function limitarOpcionesSegunCorreo(correo) {
+    const select = document.getElementById("nombre");
+    const opciones = select.options;
 
-      procesoInput.value = procesos["LUIS DIAZ"];
-    } else {
-      // Restaura select original
-      nombreInput.innerHTML = `
-        <option value="" disabled selected>Seleccione un nombre</option>
-        <option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
-        <option value="LUIS ALVARADO">LUIS EDUARDO ALVARADO</option> 
-      `;
-      nombreInput.disabled = false;
+    for (let i = 0; i < opciones.length; i++) {
+      const opcion = opciones[i];
+      opcion.disabled = false; // Reiniciar
+
+      // LUIS DIAZ solo si el correo es luis.diaz@gmail.com
+      if (opcion.value === "LUIS DIAZ" && correo !== "analista.ti@sitcar-sa.com") {
+        opcion.disabled = true;
+      }
+
+      // Giovanni Cervantes solo si el correo es giavani@gmail.com
+      if (opcion.value === "Giovanni Cervantes" && correo !== "cervantesgiovanni045@gmail.com") {
+        opcion.disabled = true;
+      }
     }
   }
 
-  // Validación y envío
+  // Validación extra antes del envío
   document.getElementById('secure-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = e.target;
+    const nombreSeleccionado = document.getElementById("nombre").value;
     const ubicacion = document.getElementById('ubicacion').value;
     const correo = document.getElementById('correo').value;
 
@@ -227,6 +193,16 @@
       return;
     }
 
+    // Validar nombre según correo
+    if (
+      (correo === "luis.diaz@gmail.com" && nombreSeleccionado !== "LUIS DIAZ") ||
+      (correo === "giavani@gmail.com" && nombreSeleccionado !== "Giovanni Cervantes")
+    ) {
+      alert("No tienes permiso para seleccionar este nombre.");
+      return;
+    }
+
+    // Envío
     const data = new FormData(form);
     fetch(form.action, {
       method: 'POST',
@@ -240,5 +216,4 @@
     });
   });
 </script>
-</body>
-</html>
+
