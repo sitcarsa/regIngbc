@@ -2,17 +2,82 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de colaboradores</title>
+  <title>Registro de Colaboradores</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-</head>
-<body>
-  <h2>Formulario de Registro</h2>
 
   <!-- Google Sign-In -->
-  <div id="googleSignIn" class="g_id_signin"
-       data-client_id="TU_CLIENT_ID_GOOGLE"
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    input[readonly] {
+      background-color: #e9ecef;
+      color: #495057;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #usuarioLogueado {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Registro de Colaboradores</h2>
+
+  <!-- Google Sign-In -->
+  <div id="googleSignIn"
+       class="g_id_signin"
+       data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
        data-callback="handleCredentialResponse"
        data-auto_prompt="false">
   </div>
@@ -21,30 +86,29 @@
 
   <!-- Formulario -->
   <form id="formularioRegistro">
-    <label for="correo">Correo:</label><br>
-    <input type="email" id="correo" name="entry.12345" readonly><br><br>
+    <label for="correo">Correo:</label>
+    <input type="email" id="correo" name="entry.519463146" readonly>
 
-    <label for="nombre">Nombre:</label><br>
-    <input type="text" id="nombre" name="entry.17282" readonly><br><br>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="entry.1728467182" readonly>
 
-    <label for="proceso">Proceso:</label><br>
-    <input type="text" id="proceso" name="entry.18784" readonly><br><br>
+    <label for="proceso">Proceso:</label>
+    <input type="text" id="proceso" name="entry.1839426784" readonly>
 
-    <label for="ubicacion">Ubicación:</label><br>
-    <input type="text" id="ubicacion" name="entry.54321" readonly><br><br>
+    <label for="ubicacion">Ubicación:</label>
+    <input type="text" id="ubicacion" name="entry.404773528" readonly>
 
-    <label for="tipoUsuario">Tipo de registro:</label><br>
-    <select id="tipoUsuario" name="entry.99999" required>
+    <label for="tipoUsuario">Tipo de registro:</label>
+    <select id="tipoUsuario" name="entry.886525947" required>
       <option value="">-- Selecciona --</option>
       <option value="Ingreso">Ingreso</option>
       <option value="Salida">Salida</option>
-    </select><br><br>
+    </select>
 
     <button type="submit">Enviar</button>
   </form>
 
   <script>
-    // Diccionario de usuarios
     const usuariosAutorizados = {
       "luis.diaz@personal.com": {
         nombre: "LUIS EDUARDO DIAZ",
@@ -68,48 +132,42 @@
       document.getElementById("usuarioLogueado").textContent = `Bienvenido, ${nombreGoogle} (${correo})`;
       document.getElementById("googleSignIn").style.display = "none";
 
-      // Validar usuario
       const usuario = usuariosAutorizados[correo];
+
       if (usuario) {
-        // Autocompletar campos
         document.getElementById("correo").value = correo;
         document.getElementById("nombre").value = usuario.nombre;
         document.getElementById("proceso").value = usuario.proceso;
 
-        // Obtener ubicación
         navigator.geolocation.getCurrentPosition(position => {
           const ubicacion = `${position.coords.latitude}, ${position.coords.longitude}`;
           document.getElementById("ubicacion").value = ubicacion;
         });
-
       } else {
         alert("Correo no autorizado.");
         location.reload();
       }
     }
 
-    // Envío del formulario
     document.getElementById("formularioRegistro").addEventListener("submit", function (e) {
       e.preventDefault();
-
-      const form = e.target;
-      const formData = new FormData(form);
-
+      const formData = new FormData(this);
       const params = new URLSearchParams();
-      for (const pair of formData) {
-        params.append(pair[0], pair[1]);
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
       }
 
-      fetch("https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO/formResponse", {
+      fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse", {
         method: "POST",
         mode: "no-cors",
         body: params
       });
 
       alert("Registro enviado con éxito");
-      form.reset();
+      this.reset();
       location.reload();
     });
   </script>
+
 </body>
 </html>
