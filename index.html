@@ -1,93 +1,89 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Registro de Colaboradores</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Google Sign-In -->
+  <title>Registro de Ingreso / Salida</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
       padding: 20px;
+      background: #f2f2f2;
     }
-
+    .container {
+      background-color: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
     h2 {
       text-align: center;
-      color: #333;
     }
-
     form {
-      max-width: 500px;
-      margin: 0 auto;
       background: white;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     label {
-      font-weight: bold;
-      margin-top: 10px;
       display: block;
+      margin-top: 10px;
     }
-
-    input, select, button {
+    input, select {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
     }
-
-    input[readonly] {
-      background-color: #e9ecef;
-      color: #495057;
+    .readonly {
+      background-color: white;
     }
-
+    #hora {
+      font-weight: bold;
+      color: #333;
+    }
     button {
-      background-color: #007bff;
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background: #4CAF50;
       color: white;
       border: none;
-      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
     }
-
-    button:hover {
-      background-color: #0056b3;
+    button[type="submit"] {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 16px;
+      z-index: 10;
+      position: relative;
     }
-
-    #usuarioLogueado {
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: bold;
-      color: #007bff;
+    .logo {
+      max-width: 50px;
+      margin-bottom: 10px;
     }
-
-  }
-    .logo { max-width: 50px; margin-bottom: 10px; }
-    .g_id_signin { margin-bottom: 15px; }
-
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
- <div class="container">
-    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
-
-
- <!-- Google Sign-In -->
+  <!-- Google Sign-In -->
   <div id="g_id_onload"
       data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
       data-context="signin"
       data-ux_mode="popup"
       data-callback="handleCredentialResponse"
-      data-auto_prompt="true">ñ
+      data-auto_prompt="true">
   </div>
 
   <div class="g_id_signin"
@@ -101,91 +97,144 @@
 
   <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
 
+  <div class="container">
+    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
+    <h2>Registro de Ingreso / Salida</h2>
 
-  <!-- Formulario -->
-  <form id="formularioRegistro">
-    <label for="correo">Correo:</label>
-    <input type="email" id="correo" name="entry.519463146" readonly>
+    <form id="secure-form" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse" target="_self">
+      <label for="nombre">Nombre:</label>
+      <select id="nombre" name="entry.1728467182" required>
+        <option value="" disabled selected>Seleccione un nombre</option>
+       
+ <option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
+        <option value="LUIS ALVARADO">LUIS EDUARDO ALVARADO</option> 
+        <option value="Giovanni Cervantes">Giovanni Cervantes</option> 
+        <option value="Maximo de La Torre">Maximo de La Torre</option> 
+ </select>
+      <label for="proceso">Proceso:</label>
+      <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
 
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="entry.1728467182" readonly>
+  <label for="tipo">Tipo de registro:</label>
+      <select id="tipo" name="entry.886525947" required>
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="Ingreso">Ingreso</option>
+        <option value="Salida">Salida</option>
+      </select>
 
-    <label for="proceso">Proceso:</label>
-    <input type="text" id="proceso" name="entry.1839426784" readonly>
+      <label for="ubicacion">Ubicación:</label>
+      <input type="text" id="ubicacion" name="entry.404773528" readonly placeholder="Detectando ubicación..." required>
 
-    <label for="ubicacion">Ubicación:</label>
-    <input type="text" id="ubicacion" name="entry.404773528" readonly>
+    <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="entry.519463146" class="readonly" readonly required>
 
-    <label for="tipoUsuario">Tipo de registro:</label>
-    <select id="tipoUsuario" name="entry.886525947" required>
-      <option value="">-- Selecciona --</option>
-      <option value="Ingreso">Ingreso</option>
-      <option value="Salida">Salida</option>
-    </select>
 
-    <button type="submit">Enviar</button>
-  </form>
+      <label>Hora actual:</label>
+      <div id="hora"></div>
+
+      <button type="submit">Enviar registro</button>
+    </form>
+  </div>
+
+
+
 
   <script>
-    const usuariosAutorizados = {
-      "luis.diaz@personal.com": {
-        nombre: "LUIS EDUARDO DIAZ",
-        proceso: "Activos"
-      },
-      "luis.diaz@empresa.com": {
-        nombre: "LUIS EDUARDO DIAZ",
-        proceso: "Activos"
-      },
-      "luis.alvarado@empresa.com": {
-        nombre: "LUIS EDUARDO ALVARADO",
-        proceso: "Activos"
+    // Geolocalización
+    function obtenerUbicacion() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          document.getElementById('ubicacion').value = lat + "," + lon;
+        }, function(error) {
+          document.getElementById('ubicacion').value = "Error: " + error.message;
+        });
+      } else {
+        document.getElementById('ubicacion').value = "Geolocalización no soportada";
       }
+    }
+    window.onload = obtenerUbicacion;
+
+    // Proceso según nombre
+    const procesos = {
+      "LUIS DIAZ": "Activos.",
+      "Giovanni Cervantes": "Activos.",
+      "LUIS ALVARADO": "Hipotecario.",
+      "Maximo de La Torre": "Hipotecario.",
     };
+
+    document.getElementById("nombre").addEventListener("change", function () {
+      const nombre = this.value;
+      document.getElementById("proceso").value = procesos[nombre] || "";
+    });
+
+    // Hora actual
+    function actualizarHora() {
+      const ahora = new Date();
+      const horaFormateada = ahora.toLocaleTimeString();
+      document.getElementById("hora").textContent = horaFormateada;
+    }
+    setInterval(actualizarHora, 1000);
+    actualizarHora();
+
+    // Control de acceso con correo y nombre
+    let correoAutenticado = "";
 
     function handleCredentialResponse(response) {
       const data = jwt_decode(response.credential);
-      const correo = data.email;
-      const nombreGoogle = data.name;
+      correoAutenticado = data.email;
+      const nombre = data.name;
 
-      document.getElementById("usuarioLogueado").textContent = `Bienvenido, ${nombreGoogle} (${correo})`;
-      document.getElementById("googleSignIn").style.display = "none";
-
-      const usuario = usuariosAutorizados[correo];
-
-      if (usuario) {
-        document.getElementById("correo").value = correo;
-        document.getElementById("nombre").value = usuario.nombre;
-        document.getElementById("proceso").value = usuario.proceso;
-
-        navigator.geolocation.getCurrentPosition(position => {
-          const ubicacion = `${position.coords.latitude}, ${position.coords.longitude}`;
-          document.getElementById("ubicacion").value = ubicacion;
-        });
-      } else {
-        alert("Correo no autorizado.");
-        location.reload();
-      }
+      document.getElementById("correo").value = correoAutenticado;
+      document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombre + " (" + correoAutenticado + ")";
+      document.querySelector(".g_id_signin").style.display = "none";
     }
 
-    document.getElementById("formularioRegistro").addEventListener("submit", function (e) {
+    // Validación y envío
+    document.getElementById('secure-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      const formData = new FormData(this);
-      const params = new URLSearchParams();
-      for (const [key, value] of formData.entries()) {
-        params.append(key, value);
+
+      const form = e.target;
+      const nombre = document.getElementById('nombre').value;
+      const ubicacion = document.getElementById('ubicacion').value;
+      const correo = correoAutenticado;
+
+      // Validaciones especiales
+      if (!correo) {
+        alert("Por favor, inicia sesión con Google antes de enviar.");
+        return;
       }
 
-      fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse", {
-        method: "POST",
-        mode: "no-cors",
-        body: params
-      });
+      if (!ubicacion || ubicacion.includes("Error") || ubicacion === "Geolocalización no soportada") {
+        alert("Espere que se cargue la ubicación antes de enviar.");
+        return;
+      }
 
-      alert("Registro enviado con éxito");
-      this.reset();
-      location.reload();
+      // Validaciones personalizadas por nombre y correo
+      const restricciones = {
+        "LUIS DIAZ": "luis.diaz@gmail.com",
+        "Giovanni Cervantes": "giavani@gmail.com"
+      };
+
+      if (restricciones[nombre] && restricciones[nombre] !== correo) {
+        alert(`Acceso denegado para ${nombre}. Debes iniciar sesión con ${restricciones[nombre]}.`);
+        return;
+      }
+
+      const data = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: data
+      }).then(() => {
+        alert("Registro enviado correctamente.");
+        form.reset();
+        document.getElementById("usuarioLogueado").textContent = "";
+        location.reload();
+      });
     });
   </script>
 
 </body>
 </html>
+
