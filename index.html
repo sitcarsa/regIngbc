@@ -1,215 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Registro de Ingreso / Salida</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Registro de colaboradores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f2f2f2;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    }
-    h2 {
-      text-align: center;
-    }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      box-sizing: border-box;
-    }
-    .readonly {
-      background-color: white;
-    }
-    #hora {
-      font-weight: bold;
-      color: #333;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px;
-      width: 100%;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    button[type="submit"] {
-      display: block;
-      width: 100%;
-      margin-top: 20px;
-      font-size: 16px;
-      z-index: 10;
-      position: relative;
-    }
-    .logo {
-      max-width: 50px;
-      margin-bottom: 10px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 </head>
 <body>
+  <h2>Formulario de Registro</h2>
 
   <!-- Google Sign-In -->
-  <div id="g_id_onload"
-      data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
-      data-context="signin"
-      data-ux_mode="popup"
-      data-callback="handleCredentialResponse"
-      data-auto_prompt="true">
+  <div id="googleSignIn" class="g_id_signin"
+       data-client_id="TU_CLIENT_ID_GOOGLE"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
   </div>
 
-  <div class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-shape="rectangular"
-      data-logo_alignment="left">
-  </div>
+  <p id="usuarioLogueado"></p>
 
-  <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
+  <!-- Formulario -->
+  <form id="formularioRegistro">
+    <label for="correo">Correo:</label><br>
+    <input type="email" id="correo" name="entry.12345" readonly><br><br>
 
-  <div class="container">
-    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
-    <h2>Registro de Ingreso / Salida</h2>
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="entry.17282" readonly><br><br>
 
-    <form id="secure-form" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse" target="_self">
-      <label for="nombre">Nombre:</label>
-      <select id="nombre" name="entry.1728467182" required>
-        <option value="" disabled selected>Seleccione un nombre</option>
+    <label for="proceso">Proceso:</label><br>
+    <input type="text" id="proceso" name="entry.18784" readonly><br><br>
 
-      </select>
-      <label for="proceso">Proceso:</label>
-      <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
+    <label for="ubicacion">Ubicación:</label><br>
+    <input type="text" id="ubicacion" name="entry.54321" readonly><br><br>
 
-      <label for="tipo">Tipo de registro:</label>
-      <select id="tipo" name="entry.886525947" required>
-        <option value="" disabled selected>Seleccione una opción</option>
-        <option value="Ingreso">Ingreso</option>
-        <option value="Salida">Salida</option>
-      </select>
+    <label for="tipoUsuario">Tipo de registro:</label><br>
+    <select id="tipoUsuario" name="entry.99999" required>
+      <option value="">-- Selecciona --</option>
+      <option value="Ingreso">Ingreso</option>
+      <option value="Salida">Salida</option>
+    </select><br><br>
 
-      <label for="ubicacion">Ubicación:</label>
-      <input type="text" id="ubicacion" name="entry.404773528" readonly placeholder="Detectando ubicación..." required>
-
-      <label for="correo">Correo electrónico:</label>
-      <input type="email" id="correo" name="entry.519463146" class="readonly" readonly required>
-
-      <label>Hora actual:</label>
-      <div id="hora"></div>
-      
-      <button type="submit">Enviar registro</button>
-    </form>
-  </div>
+    <button type="submit">Enviar</button>
+  </form>
 
   <script>
-    const datosUsuarios = {
-      "analista.ti@sitcar-sa.com": {
-        nombre: "LUIS DIAZ",
+    // Diccionario de usuarios
+    const usuariosAutorizados = {
+      "luis.diaz@personal.com": {
+        nombre: "LUIS EDUARDO DIAZ",
         proceso: "Activos"
       },
       "luis.diaz@empresa.com": {
-        nombre: "LUIS DIAZ",
+        nombre: "LUIS EDUARDO DIAZ",
+        proceso: "Activos"
+      },
+      "luis.alvarado@empresa.com": {
+        nombre: "LUIS EDUARDO ALVARADO",
         proceso: "Activos"
       }
     };
 
-    function obtenerUbicacion() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const lat = position.coords.latitude.toFixed(6);
-          const lon = position.coords.longitude.toFixed(6);
-          document.getElementById('ubicacion').value = lat + "," + lon;
-        }, function(error) {
-          document.getElementById('ubicacion').value = "Error: " + error.message;
-        });
-      } else {
-        document.getElementById('ubicacion').value = "Geolocalización no soportada";
-      }
-    }
-
     function handleCredentialResponse(response) {
       const data = jwt_decode(response.credential);
       const correo = data.email;
+      const nombreGoogle = data.name;
 
-      if (!datosUsuarios[correo]) {
-        document.getElementById("mensaje-error").textContent = "Acceso denegado. Este correo no está autorizado.";
-        document.querySelector(".g_id_signin").style.display = "none";
-        return;
+      document.getElementById("usuarioLogueado").textContent = `Bienvenido, ${nombreGoogle} (${correo})`;
+      document.getElementById("googleSignIn").style.display = "none";
+
+      // Validar usuario
+      const usuario = usuariosAutorizados[correo];
+      if (usuario) {
+        // Autocompletar campos
+        document.getElementById("correo").value = correo;
+        document.getElementById("nombre").value = usuario.nombre;
+        document.getElementById("proceso").value = usuario.proceso;
+
+        // Obtener ubicación
+        navigator.geolocation.getCurrentPosition(position => {
+          const ubicacion = `${position.coords.latitude}, ${position.coords.longitude}`;
+          document.getElementById("ubicacion").value = ubicacion;
+        });
+
+      } else {
+        alert("Correo no autorizado.");
+        location.reload();
       }
-
-      const { nombre, proceso } = datosUsuarios[correo];
-
-      document.getElementById("formulario").style.display = "block";
-      document.querySelector(".g_id_signin").style.display = "none";
-      document.getElementById("mensaje-error").textContent = "";
-
-      document.getElementById("nombre").value = nombre;
-      document.getElementById("proceso").value = proceso;
-      document.getElementById("correo").value = correo;
-
-      obtenerUbicacion();
     }
 
-    document.getElementById("registro-form").addEventListener("submit", function(e) {
+    // Envío del formulario
+    document.getElementById("formularioRegistro").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const ubicacion = document.getElementById("ubicacion").value;
-      const tipo = document.getElementById("tipo").value;
-
-      if (!tipo) {
-        alert("Seleccione el tipo de registro.");
-        return;
-      }
-
-      if (!ubicacion || ubicacion.includes("Error")) {
-        alert("Espere a que la ubicación se cargue correctamente.");
-        return;
-      }
-
       const form = e.target;
-      const data = new FormData(form);
+      const formData = new FormData(form);
 
-      fetch(form.action, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: data
-      }).then(() => {
-        alert("Registro enviado correctamente.");
-        form.reset();
-        document.getElementById("formulario").style.display = "none";
-        location.reload();
+      const params = new URLSearchParams();
+      for (const pair of formData) {
+        params.append(pair[0], pair[1]);
+      }
+
+      fetch("https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO/formResponse", {
+        method: "POST",
+        mode: "no-cors",
+        body: params
       });
+
+      alert("Registro enviado con éxito");
+      form.reset();
+      location.reload();
     });
   </script>
-
 </body>
 </html>
