@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,18 +99,20 @@
 
    <form id="secure-form" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse" target="_self">
 
-       <label for="nombre">Nombre:</label>
-      <select id="nombre" name="entry.1728467182" required>
-        <option value="" disabled selected>Seleccione un nombre</option>
+   
+<!-- Mostrar el nombre como solo lectura -->
+<label for="nombre_mostrar">Nombre:</label>
+<input type="text" id="nombre_mostrar" readonly required>
 
-        <option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
-        <option value="LUIS ALVARADO">LUIS EDUARDO ALVARADO</option> 
-        <option value="Giovanni Cervantes">Giovanni Cervantes</option> 
-        <option value="Maximo de La Torre">Maximo de La Torre</option> 
-      </select>
+<!-- Campo oculto para enviar el nombre a Google Forms -->
+<input type="hidden" id="nombre" name="entry.1782" required>
 
-      <label for="proceso">Proceso:</label>
-      <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
+<!-- Mostrar proceso como solo lectura -->
+<label for="proceso_mostrar">Proceso:</label>
+<input type="text" id="proceso_mostrar" readonly required>
+<!-- Campo oculto para enviar proceso al formulario -->
+<input type="hidden" id="proceso" name="entry.1884" required>
+
 
       <label for="tipo">Tipo de registro:</label>
       <select id="tipo" name="entry.886525947" required>
@@ -118,36 +121,12 @@
         <option value="Salida">Salida</option>
       </select>
 
-      <label for="ubicacion">Ubicación:</label>
-      <input type="text" id="ubicacion" name="entry.404773528" readonly placeholder="Detectando ubicación..." required>
-
-      <label for="correo">Correo electrónico:</label>
-      <input type="email" id="correo" name="entry.519463146" class="readonly" readonly required>
-
-      <label>Hora actual:</label>
-      <div id="hora"></div>
-
       <button type="submit">Enviar registro</button>
     </form>
   </div>
 
 
   <script>
-    const restricciones = {
-      "LUIS DIAZ": [
-        "analista.ti@sitcar-sa.com",
-        "cervantesgiovanni045@gmail.com"
-      ],
-      "Giovanni Cervantes": [
-        "giavani@gmail.com"
-      ]
-    };
-
-    const procesos = {
-      "LUIS DIAZ": "SISTEMAS",
-      "Giovanni Cervantes": "ADMINISTRATIVO"
-    };
-
    // Geolocalización
     function obtenerUbicacion() {
       if (navigator.geolocation) {
@@ -165,26 +144,36 @@
     window.onload = obtenerUbicacion;
 
 
+const procesos = {
+  "LUIS DIAZ": "SISTEMAS",
+  "Giovanni Cervantes": "ADMINISTRATIVO",
+  "LUIS ALVARADO": "SOPORTE",
+  "Maximo de La Torre": "GESTIÓN"
+};
 
 
-    // Autorizacion por medio de correo electronico
 function handleCredentialResponse(response) {
   const data = parseJwt(response.credential);
   const correoAutenticado = data.email;
   document.getElementById("correo").value = correoAutenticado;
 
-  let autorizado = false;
-
   for (const [nombreFormulario, correosPermitidos] of Object.entries(restricciones)) {
     if (correosPermitidos.map(c => c.toLowerCase()).includes(correoAutenticado.toLowerCase())) {
+
+      // Mostrar nombre en campo visible
+      document.getElementById("nombre_mostrar").value = nombreFormulario;
+      // Asignar al campo oculto para enviar a Google Forms
       document.getElementById("nombre").value = nombreFormulario;
-      document.getElementById("nombre").readOnly = true;
-      document.getElementById("proceso").value = procesos[nombreFormulario] || "";
-      document.getElementById("proceso").readOnly = true;
-      autorizado = true;
+
+      // Asignar proceso al visible y oculto
+      const procesoAsignado = procesos[nombreFormulario] || "";
+      document.getElementById("proceso_mostrar").value = procesoAsignado;
+      document.getElementById("proceso").value = procesoAsignado;
+
       break;
     }
   }
+}
 
   if (autorizado) {
     document.getElementById("secure-form").style.display = "block";
@@ -248,6 +237,3 @@ function handleCredentialResponse(response) {
   </script>
 </body>
 </html>
-
-
-
