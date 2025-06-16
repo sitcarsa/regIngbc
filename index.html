@@ -163,7 +163,7 @@ si
     }
     window.onload = obtenerUbicacion;
 
-
+document.getElementById("secure-form").style.display = "none";
     function handleCredentialResponse(response) {
       const data = parseJwt(response.credential);
       const correoAutenticado = data.email;
@@ -178,7 +178,14 @@ si
           break;
         }
       }
+          if (autenticado) {
+    document.getElementById("secure-form").style.display = "block";
+    document.querySelector(".g_id_signin").style.display = "none";
+  }
+}
     }
+
+
 
     function parseJwt(token) {
       const base64Url = token.split('.')[1];
