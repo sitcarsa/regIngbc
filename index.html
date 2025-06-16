@@ -157,10 +157,10 @@
 
     // Proceso según nombre
     const procesos = {
-      "LUIS DIAZ": "Activos.",
-      "Giovanni Cervantes": "Activos.",
-      "LUIS ALVARADO": "Hipotecario.",
-      "Maximo de La Torre": "Hipotecario.",
+      "LUIS DIAZ": "Activos",
+      "Giovanni Cervantes": "Hipotecario",
+      
+      
     };
 
     document.getElementById("nombre").addEventListener("change", function () {
@@ -210,10 +210,10 @@
         return;
       }
 
-      // Validaciones personalizadas por nombre y correo
+       // Validaciones personalizadas por nombre y correo
       const restricciones = {
-        "LUIS DIAZ": "luis.diaz@gmail.com",
-        "Giovanni Cervantes": "giavani@gmail.com"
+        "LUIS DIAZ": "analista.ti@sitar-sa.com",
+        "Giovanni Cervantes": "cervantesgiovanni045@gmail.com"
       };
 
       if (restricciones[nombre] && restricciones[nombre] !== correo) {
