@@ -1,3 +1,5 @@
+si
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -216,6 +218,8 @@ function handleCredentialResponse(response) {
 
       // Validar al enviar
     document.getElementById("secure-form").addEventListener("submit", function(event) {
+event.preventDefault(); // Evita la redirección
+
       const nombre = document.getElementById("nombre").value;
       const correo = document.getElementById("correo").value;
 
@@ -231,5 +235,6 @@ function handleCredentialResponse(response) {
   </script>
 </body>
 </html>
+
 
 
