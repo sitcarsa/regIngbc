@@ -196,14 +196,10 @@
     setInterval(actualizarHora, 1000);
     actualizarHora();
 
-      // Validación y envío
-    document.getElementById('secure-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const nombre = document.getElementById('nombre').value;
-      const ubicacion = document.getElementById('ubicacion').value;
-      const correo = correoAutenticado;
-
+      // Validar al enviar
+    document.getElementById("secure-form").addEventListener("submit", function(event) {
+      const nombre = document.getElementById("nombre").value;
+      const correo = document.getElementById("correo").value;
 
       if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
         alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
@@ -216,4 +212,5 @@
   </script>
 </body>
 </html>
+
 
