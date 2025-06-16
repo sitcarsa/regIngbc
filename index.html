@@ -68,21 +68,39 @@
       font-weight: bold;
       color: #007bff;
     }
+
+  }
+    .logo { max-width: 50px; margin-bottom: 10px; }
+    .g_id_signin { margin-bottom: 15px; }
+
   </style>
 </head>
 <body>
 
-  <h2>Registro de Colaboradores</h2>
+ <div class="container">
+    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
 
-  <!-- Google Sign-In -->
-  <div id="googleSignIn"
-       class="g_id_signin"
-       data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+
+ <!-- Google Sign-In -->
+  <div id="g_id_onload"
+      data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="true">ñ
   </div>
 
-  <p id="usuarioLogueado"></p>
+  <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left">
+  </div>
+
+  <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
+
 
   <!-- Formulario -->
   <form id="formularioRegistro">
