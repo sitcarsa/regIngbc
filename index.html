@@ -218,18 +218,20 @@ function handleCredentialResponse(response) {
     setInterval(actualizarHora, 1000);
     actualizarHora();
 
-      // Validar al enviar
-    document.getElementById("secure-form").addEventListener("submit", function(event) {
-event.preventDefault(); // Evita la redirección
+ // Envío del formulario sin redirigir a Google Forms
+  document.getElementById("secure-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita la redirección
 
-      const nombre = document.getElementById("nombre").value;
-      const correo = document.getElementById("correo").value;
+    const form = event.target;
+    const data = new FormData(form);
 
-      if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
-        alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
-        event.preventDefault();
-        return;
-      }
+    const nombre = data.get("entry.1728467182");
+    const correo = data.get("entry.519463146");
+
+    if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
+      alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
+      return;
+    }
 
     fetch(form.action, {
       method: "POST",
