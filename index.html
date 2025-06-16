@@ -175,7 +175,7 @@ function handleCredentialResponse(response) {
   for (const [nombreFormulario, correosPermitidos] of Object.entries(restricciones)) {
     if (correosPermitidos.map(c => c.toLowerCase()).includes(correoAutenticado.toLowerCase())) {
       document.getElementById("nombre").value = nombreFormulario;
-      document.getElementById("nombre").disabled = true;
+      document.getElementById("nombre").readOnly = true;
       document.getElementById("proceso").value = procesos[nombreFormulario] || "";
       document.getElementById("proceso").readOnly = true;
       autorizado = true;
