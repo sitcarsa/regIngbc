@@ -145,6 +145,23 @@
       "Giovanni Cervantes": "ADMINISTRATIVO"
     };
 
+   // Geolocalización
+    function obtenerUbicacion() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          document.getElementById('ubicacion').value = lat + "," + lon;
+        }, function(error) {
+          document.getElementById('ubicacion').value = "Error: " + error.message;
+        });
+      } else {
+        document.getElementById('ubicacion').value = "Geolocalización no soportada";
+      }
+    }
+    window.onload = obtenerUbicacion;
+
+
     function handleCredentialResponse(response) {
       const data = parseJwt(response.credential);
       const correoAutenticado = data.email;
@@ -170,8 +187,14 @@
       return JSON.parse(jsonPayload);
     }
 
-    // Rellenar hora actual automáticamente
-    document.getElementById("hora").value = new Date().toLocaleString();
+    // Hora actual
+    function actualizarHora() {
+      const ahora = new Date();
+      const horaFormateada = ahora.toLocaleTimeString();
+      document.getElementById("hora").textContent = horaFormateada;
+    }
+    setInterval(actualizarHora, 1000);
+    actualizarHora();
 
     // Validar al enviar
     document.getElementById("registroForm").addEventListener("submit", function(event) {
