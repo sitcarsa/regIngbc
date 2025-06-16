@@ -225,20 +225,9 @@ function handleCredentialResponse(response) {
         return;
       }
 
-       const data = new FormData(form);
-      fetch(form.action, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: data
-      }).then(() => {
-        alert("Registro enviado correctamente.");
-        form.reset();
-        document.getElementById("usuarioLogueado").textContent = "";
-        location.reload();
-      });
+      alert("Formulario enviado correctamente."); // Puedes eliminar esta línea si usas Google Forms
     });
 
-    });
   </script>
 </body>
 </html>
