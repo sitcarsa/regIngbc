@@ -106,6 +106,7 @@
         document.getElementById('ubicacion').value = "Geolocalización no soportada";
       }
     }
+    window.onload = obtenerUbicacion;
 
     // Lista de correos permitidos
     const restricciones = {
@@ -139,6 +140,7 @@
         }
       }
     }
+    
 
     function parseJwt(token) {
       const base64Url = token.split('.')[1];
