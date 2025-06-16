@@ -5,85 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f2f2f2;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f2f2f2; }
     .container {
       background-color: white;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      padding: 20px; max-width: 600px; margin: auto;
+      border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2);
     }
-    h2 {
-      text-align: center;
-    }
+    h2 { text-align: center; }
     form {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px; border-radius: 10px;
+      max-width: 500px; margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); background: white;
     }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
+    label { display: block; margin-top: 10px; }
     input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      box-sizing: border-box;
+      width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box;
     }
-    .readonly {
-      background-color: white;
-    }
-    #hora {
-      font-weight: bold;
-      color: #333;
-    }
+    .readonly { background-color: white; }
+    #hora { font-weight: bold; color: #333; }
     button {
-      margin-top: 20px;
-      padding: 10px;
-      width: 100%;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
+      margin-top: 20px; padding: 10px; width: 100%;
+      background: #4CAF50; color: white;
+      border: none; border-radius: 5px; font-size: 16px;
     }
-    button[type="submit"] {
-      display: block;
-      width: 100%;
-      margin-top: 20px;
-      font-size: 16px;
-      z-index: 10;
-      position: relative;
-    }
-    .logo {
-      max-width: 50px;
-      margin-bottom: 10px;
-    }
-    .hidden {
-      display: none;
-    }
+    .logo { max-width: 50px; margin-bottom: 10px; }
+    .g_id_signin { margin-bottom: 15px; }
   </style>
 </head>
 <body>
 
-  <!-- Google Sign-In -->
+ <!-- Google Sign-In -->
   <div id="g_id_onload"
       data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
       data-context="signin"
       data-ux_mode="popup"
       data-callback="handleCredentialResponse"
-      data-auto_prompt="true">
+      data-auto_prompt="true">ñ
   </div>
 
   <div class="g_id_signin"
@@ -97,21 +55,21 @@
 
   <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
 
-  <div class="container">
+ <div class="container">
     <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
     <h2>Registro de Ingreso / Salida</h2>
 
     <form id="secure-form" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse" target="_self">
-      <label for="nombre">Nombre:</label>
-      <select id="nombre" name="entry.1728467182" required>
-        <option value="" disabled selected>Seleccione un nombre</option>
-       
-       <option value="LUIS DIAZ">LUIS EDUARDO DIAZ</option> 
-       <option value="Giovanni Cervantes">Giovanni Cervantes</option> 
-       
- </select>
-      <label for="proceso">Proceso:</label>
-      <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
+
+
+
+<label for="nombre">Nombre:</label>
+<input type="text" id="nombre" name="entry.1728467182" readonly required>
+
+
+<label for="proceso">Proceso:</label>
+<input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
+
 
   <label for="tipo">Tipo de registro:</label>
       <select id="tipo" name="entry.886525947" required>
@@ -133,107 +91,3 @@
       <button type="submit">Enviar registro</button>
     </form>
   </div>
-
-
-
-
-  <script>
-    // Geolocalización
-    function obtenerUbicacion() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const lat = position.coords.latitude.toFixed(6);
-          const lon = position.coords.longitude.toFixed(6);
-          document.getElementById('ubicacion').value = lat + "," + lon;
-        }, function(error) {
-          document.getElementById('ubicacion').value = "Error: " + error.message;
-        });
-      } else {
-        document.getElementById('ubicacion').value = "Geolocalización no soportada";
-      }
-    }
-    window.onload = obtenerUbicacion;
-
-    // Proceso según nombre
-    const procesos = {
-      "LUIS DIAZ": "Activos",
-      "Giovanni Cervantes": "Hipotecario",
-      
-      
-    };
-
-    document.getElementById("nombre").addEventListener("change", function () {
-      const nombre = this.value;
-      document.getElementById("proceso").value = procesos[nombre] || "";
-    });
-
-    // Hora actual
-    function actualizarHora() {
-      const ahora = new Date();
-      const horaFormateada = ahora.toLocaleTimeString();
-      document.getElementById("hora").textContent = horaFormateada;
-    }
-    setInterval(actualizarHora, 1000);
-    actualizarHora();
-
-    // Control de acceso con correo y nombre
-    let correoAutenticado = "";
-
-    function handleCredentialResponse(response) {
-      const data = jwt_decode(response.credential);
-      correoAutenticado = data.email;
-      const nombre = data.name;
-
-      document.getElementById("correo").value = correoAutenticado;
-      document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombre + " (" + correoAutenticado + ")";
-      document.querySelector(".g_id_signin").style.display = "none";
-    }
-
-    // Validación y envío
-    document.getElementById('secure-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const form = e.target;
-      const nombre = document.getElementById('nombre').value;
-      const ubicacion = document.getElementById('ubicacion').value;
-      const correo = correoAutenticado;
-
-      // Validaciones especiales
-      if (!correo) {
-        alert("Por favor, inicia sesión con Google antes de enviar.");
-        return;
-      }
-
-      if (!ubicacion || ubicacion.includes("Error") || ubicacion === "Geolocalización no soportada") {
-        alert("Espere que se cargue la ubicación antes de enviar.");
-        return;
-      }
-
-       // Validaciones personalizadas por nombre y correo
-      const restricciones = {
-        "LUIS DIAZ": "analista.ti@sitcar-sa.com",
-        "Giovanni Cervantes": "cervantesgiovanni045@gmail.com"
-      };
-
-      if (restricciones[nombre] && restricciones[nombre] !== correo) {
-        alert(`Acceso denegado para ${nombre}. Debes iniciar sesión con ${restricciones[nombre]}.`);
-        return;
-      }
-
-      const data = new FormData(form);
-      fetch(form.action, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: data
-      }).then(() => {
-        alert("Registro enviado correctamente.");
-        form.reset();
-        document.getElementById("usuarioLogueado").textContent = "";
-        location.reload();
-      });
-    });
-  </script>
-
-</body>
-</html>
-
