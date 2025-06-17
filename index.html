@@ -86,7 +86,7 @@
   <!-- Formulario protegido -->
   <form id="secure-form" style="display:none" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse">
 
-    <input type="hidden" id="correo" name="entry.1234567890">
+    <input type="hidden" id="correo" name="entry.519463146">
 
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="entry.1728467182" readonly><br>
@@ -205,6 +205,20 @@
     setInterval(actualizarHora, 1000);
     actualizarHora();  
 
+
+
+  fetch(form.action, {
+      method: "POST",
+      mode: "no-cors", // requerido para Google Forms
+      body: data
+    }).then(() => {
+      alert("Formulario enviado correctamente.");
+      window.location.reload(); // Recarga la página
+    }).catch((error) => {
+      console.error("Error al enviar el formulario:", error);
+      alert("Ocurrió un error al enviar el formulario.");
+    });
+  });
 
 
 </script>
