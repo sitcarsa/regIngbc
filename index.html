@@ -205,22 +205,33 @@
     setInterval(actualizarHora, 1000);
     actualizarHora();  
 
- // Envío del formulario sin redirigir a Google Forms
-  document.getElementById("secure-form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evita la redirección
+  // Envío sin redirección
+    document.getElementById("secure-form").addEventListener("submit", function(event) {
+      event.preventDefault(); // Evita la redirección
 
-    const form = event.target;
-    const data = new FormData(form);
+      const form = event.target;
+      const data = new FormData(form);
 
-    const nombre = data.get("entry.1728467182");
-    const correo = data.get("entry.519463146");
+      const nombre = data.get("entry.1728467182");
+      const correo = data.get("entry.519463146");
 
-    if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
-      alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
-      return;
-    }
+      if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
+        alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
+        return;
+      }
 
-
+      fetch(form.action, {
+        method: "POST",
+        mode: "no-cors", // requerido para Google Forms
+        body: data
+      }).then(() => {
+        alert("Formulario enviado correctamente.");
+        window.location.reload(); // Recarga la página
+      }).catch((error) => {
+        console.error("Error al enviar el formulario:", error);
+        alert("Ocurrió un error al enviar el formulario.");
+      });
+    });
 
 
 
