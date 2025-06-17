@@ -5,7 +5,10 @@
   <title>Registro de Ingreso / Salida</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <style>
+  
+
+// CSS
+<style>
      #secure-form {
     display: none;
   }
@@ -82,20 +85,30 @@
   </div>
 
   <!-- Formulario protegido -->
-  <form id="secure-form" style="display:none" method="POST" action="https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO/formResponse">
+  <form id="secure-form" style="display:none" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse">
+
     <input type="hidden" id="correo" name="entry.1234567890">
 
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="entry.1728467182" readonly><br>
 
     <label for="proceso">Proceso:</label>
-    <input type="text" id="proceso" name="entry.1474896664" readonly><br>
+    <input type="text" id="proceso" name="entry.1839426784" readonly><br>
 
     <label for="ubicacion">Ubicación:</label>
-    <input type="text" id="ubicacion" name="entry.2101070450" readonly><br>
+    <input type="text" id="ubicacion" name="entry.404773528" readonly><br>
 
-    <label for="hora">Hora actual:</label>
-    <input type="text" id="hora" name="entry.369186007" readonly><br>
+ <label for="tipo">Tipo de registro:</label>
+    <select id="tipo" name="entry.886525947" required>
+      <option value="" disabled selected>Seleccione</option>
+
+      <option value="Ingreso">Ingreso</option>
+      <option value="Salida">Salida</option>
+    </select><br>
+
+  <label>Hora actual:</label>
+      <div id="hora"></div>
+
 
     <button type="submit">Enviar</button>
   </form>
