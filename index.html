@@ -1,236 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Registro de Ingreso / Salida</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-
-  <style>
-     #secure-form {
-    display: none;
-  }
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f2f2f2;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    }
-    h2 {
-      text-align: center;
-    }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      box-sizing: border-box;
-    }
-    .readonly {
-      background-color: white;
-    }
-    #hora {
-      font-weight: bold;
-      color: #333;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px;
-      width: 100%;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    .logo {
-      max-width: 50px;
-      margin-bottom: 10px;
-    }
-  </style>
 </head>
 <body>
+  <div id="usuarioLogueado"></div>
 
-  <!-- Google Sign-In -->
-  <div id="g_id_onload"
-
-        data-client_id="913719289694-nkf9acf2o7habopplloaoul2ufagomq1.apps.googleusercontent.com"
-
-      data-context="signin"
-      data-ux_mode="popup"
-      data-callback="handleCredentialResponse"
-      data-auto_prompt="true">
-  </div>
-
+  <!-- Botón de Google Sign-In -->
   <div class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-shape="rectangular"
-      data-logo_alignment="left">
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular"
+       data-logo_alignment="left">
   </div>
 
-  <p id="usuarioLogueado" style="font-weight: bold; margin-top: 10px;"></p>
+  <!-- Formulario protegido -->
+  <form id="secure-form" style="display:none" method="POST" action="https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO/formResponse">
+    <input type="hidden" id="correo" name="entry.1234567890">
 
-<div class="container">
-    <img src="https://sitcarsa.github.io/regIngbc/LOGO.png" alt="Logo de la empresa" class="logo">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="entry.1728467182" readonly><br>
 
-    <h2>Registro de Ingreso / Salida</h2>
+    <label for="proceso">Proceso:</label>
+    <input type="text" id="proceso" name="entry.1474896664" readonly><br>
 
-   <form id="secure-form" method="POST" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfsCMfw-cxAfS2ybwVTpYT6_-t0wprCWK7iJHdXlKwVS-jhYg/formResponse" target="_self">
+    <label for="ubicacion">Ubicación:</label>
+    <input type="text" id="ubicacion" name="entry.2101070450" readonly><br>
 
-       <label for="nombre">Nombre:</label>
-      <select id="nombre" name="entry.1728467182" required>
-        <option value="" disabled selected>Seleccione un nombre</option>
+    <label for="hora">Hora actual:</label>
+    <input type="text" id="hora" name="entry.369186007" readonly><br>
 
-        <option value="LUIS DIAZ">LUIS DIAZ</option> 
-
-      </select>
-
-      <label for="proceso">Proceso:</label>
-      <input type="text" id="proceso" name="entry.1839426784" placeholder="------" readonly required>
-
-      <label for="tipo">Tipo de registro:</label>
-      <select id="tipo" name="entry.886525947" required>
-        <option value="" disabled selected>Seleccione una opción</option>
-        <option value="Ingreso">Ingreso</option>
-        <option value="Salida">Salida</option>
-      </select>
-
-      <label for="ubicacion">Ubicación:</label>
-      <input type="text" id="ubicacion" name="entry.404773528" readonly placeholder="Detectando ubicación..." required>
-
-      <label for="correo">Correo electrónico:</label>
-      <input type="email" id="correo" name="entry.519463146" class="readonly" readonly required>
-
-      <label>Hora actual:</label>
-      <div id="hora"></div>
-
-      <button type="submit">Enviar registro</button>
-    </form>
-  </div>
-
+    <button type="submit">Enviar</button>
+  </form>
 
   <script>
+    // Restricciones por nombre de formulario
     const restricciones = {
-      "LUIS DIAZ": [
-        "analista.ti@sitcar-sa.com",
-        "cervantesgiovanni045@gmail.com"
-      ],
-
-      };
-
-    const procesos = {
-      "LUIS DIAZ": "Activos",
+      "Luis Eduardo Diaz": ["analista.ti@sitcar-sa.com"],
+      "Juan Pérez": ["juan.perez@empresa.com"]
     };
 
-   // Geolocalización
-    function obtenerUbicacion() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const lat = position.coords.latitude.toFixed(6);
-          const lon = position.coords.longitude.toFixed(6);
-          document.getElementById('ubicacion').value = lat + "," + lon;
-        }, function(error) {
-          document.getElementById('ubicacion').value = "Error: " + error.message;
-        });
-      } else {
-        document.getElementById('ubicacion').value = "Geolocalización no soportada";
-      }
-    }
-    window.onload = obtenerUbicacion;
+    const procesos = {
+      "Luis Eduardo Diaz": "Seguridad TI",
+      "Juan Pérez": "Talento Humano"
+    };
 
-  // Google Sign-In
-  function handleCredentialResponse(response) {
-    const data = parseJwt(response.credential);
-    const correoAutenticado = data.email;
-    document.getElementById("correo").value = correoAutenticado;
+    // Cargar Google Sign-In
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "TU_CLIENT_ID_DE_GOOGLE",
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.querySelector(".g_id_signin"),
+        { theme: "outline", size: "large" }
+      );
+    };
 
-    for (const [nombreFormulario, correosPermitidos] of Object.entries(restricciones)) {
-      if (correosPermitidos.map(c => c.toLowerCase()).includes(correoAutenticado.toLowerCase())) {
-        const nombreSelect = document.getElementById("nombre");
-        for (const option of nombreSelect.options) {
-          if (option.value === nombreFormulario) {
-            option.selected = true;
-            break;
-          }
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      const correoAutenticado = data.email;
+      console.log("JWT Decodificado:", data);
+      console.log("Correo autenticado:", correoAutenticado);
+
+      document.getElementById("correo").value = correoAutenticado;
+
+      let autorizado = false;
+
+      for (const [nombreFormulario, correosPermitidos] of Object.entries(restricciones)) {
+        if (correosPermitidos.map(c => c.toLowerCase()).includes(correoAutenticado.toLowerCase())) {
+          document.getElementById("nombre").value = nombreFormulario;
+          document.getElementById("proceso").value = procesos[nombreFormulario] || "";
+          autorizado = true;
+          break;
         }
-        nombreSelect.disabled = true;
+      }
 
-        document.getElementById("proceso").value = procesos[nombreFormulario] || "";
-        document.getElementById("proceso").readOnly = true;
-        break;
+      if (autorizado) {
+        document.getElementById("secure-form").style.display = "block";
+        document.querySelector(".g_id_signin").style.display = "none";
+        document.getElementById("usuarioLogueado").innerText = "Sesión iniciada: " + correoAutenticado;
+      } else {
+        document.getElementById("usuarioLogueado").innerText = "Este correo no está autorizado.";
+        alert("Acceso denegado. Su cuenta no está autorizada para usar este formulario.");
       }
     }
-  }
-
 
     function parseJwt(token) {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
       return JSON.parse(jsonPayload);
     }
 
-    // Hora actual
-    function actualizarHora() {
-      const ahora = new Date();
-      const horaFormateada = ahora.toLocaleTimeString();
-      document.getElementById("hora").textContent = horaFormateada;
-    }
-    setInterval(actualizarHora, 1000);
-    actualizarHora();
-
- // Envío del formulario sin redirigir a Google Forms
-  document.getElementById("secure-form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evita la redirección
-
-    const form = event.target;
-    const data = new FormData(form);
-
-    const nombre = data.get("entry.1728467182");
-    const correo = data.get("entry.519463146");
-
-    if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
-      alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
-      return;
+    // Obtener ubicación al cargar
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude.toFixed(6);
+        const lon = position.coords.longitude.toFixed(6);
+        document.getElementById('ubicacion').value = `${lat},${lon}`;
+      }, function (error) {
+        document.getElementById('ubicacion').value = 'Ubicación no disponible';
+      });
     }
 
-    fetch(form.action, {
-      method: "POST",
-      mode: "no-cors", // requerido para Google Forms
-      body: data
-    }).then(() => {
-      alert("Formulario enviado correctamente.");
-      window.location.reload(); // Recarga la página
-    }).catch((error) => {
-      console.error("Error al enviar el formulario:", error);
-      alert("Ocurrió un error al enviar el formulario.");
-    });
-  });
-
-
+    // Mostrar hora actual
+    const horaInput = document.getElementById("hora");
+    if (horaInput) {
+      const now = new Date();
+      horaInput.value = now.toLocaleString("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+    }
   </script>
 </body>
 </html>
