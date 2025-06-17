@@ -159,27 +159,32 @@
     }
     window.onload = obtenerUbicacion;
 
-
-
-
-    // Autorizacion por medio de correo electronico
 function handleCredentialResponse(response) {
-  const data = parseJwt(response.credential);
-  const correoAutenticado = data.email;
-  document.getElementById("correo").value = correoAutenticado;
+    const data = parseJwt(response.credential);
+    const correoAutenticado = data.email;
+    document.getElementById("correo").value = correoAutenticado;
 
-  let autorizado = false;
+    for (const [nombreFormulario, correosPermitidos] of Object.entries(restricciones)) {
+      if (correosPermitidos.map(c => c.toLowerCase()).includes(correoAutenticado.toLowerCase())) {
+        const nombreSelect = document.getElementById("nombre");
+        for (const option of nombreSelect.options) {
+          if (option.value === nombreFormulario) {
+            option.selected = true;
+            break;
+          }
+        }
+        nombreSelect.disabled = true;
 
-  for (const [nombreFormulario, correosPermitidos] of Object.entries(restricciones)) {
-    if (correosPermitidos.map(c => c.toLowerCase()).includes(correoAutenticado.toLowerCase())) {
-      document.getElementById("nombre").value = nombreFormulario;
-      document.getElementById("nombre").readOnly = true;
-      document.getElementById("proceso").value = procesos[nombreFormulario] || "";
-      document.getElementById("proceso").readOnly = true;
-      autorizado = true;
-      break;
+        document.getElementById("proceso").value = procesos[nombreFormulario] || "";
+        document.getElementById("proceso").readOnly = true;
+        break;
+      }
     }
   }
+
+
+
+
 
   if (autorizado) {
     document.getElementById("secure-form").style.display = "block";
