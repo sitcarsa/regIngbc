@@ -107,7 +107,7 @@
       <select id="nombre" name="entry.1728467182" required>
         <option value="" disabled selected>Seleccione un nombre</option>
        
-	<option value="ARFFY ALONSO">ALONSO PINILLA ARFFY KAROLAINN</option>
+<option value="ARFFY ALONSO">ALONSO PINILLA ARFFY KAROLAINN</option>
 <option value="FRANCINETH BEDOYA">BEDOYA HOYOS FRANCINETH</option>
 <option value="ANGIE BELTRAN">BELTRAN HERRERA ANGIE TATIANA</option>
 <option value="PAULA PIMIENTA">BELTRAN PIMIENTA PAULA ANDREA</option>
@@ -151,9 +151,6 @@
 <option value="CAMILO VARGAS">VARGAS PABON CAMILO ANDRES</option>
 <option value="LUIS DIAZ">DIAZ ALVARADO  LUIS EDUARDO</option>
 
-
-
-
      </select>
 
       <label for="proceso">Proceso:</label>
@@ -172,9 +169,6 @@
       <label for="correo">Correo electrónico:</label>
       <input type="email" id="correo" name="entry.519463146" class="readonly" readonly required>
 
- <label for="Novedad">Observación - Novedad:</label>
-    <input type="text" id="Novedad" name="entry.1814949826" ><br>
-
       <label>Hora actual:</label>
       <div id="hora"></div>
 
@@ -182,7 +176,7 @@
     </form>
   </div>
 
-  <script>
+ <script>
     // Geolocalización
     function obtenerUbicacion() {
       if (navigator.geolocation) {
@@ -246,8 +240,9 @@
 	"LOREN TAVERA": "Hipotecario",
 	"DANNA VARGAS": "Hipotecario",
 	"LUIS DIAZ": "Gestión TI",
-     };
-	  
+
+	   
+    };
     document.getElementById("nombre").addEventListener("change", function () {
       const nombre = this.value;
       document.getElementById("proceso").value = procesos[nombre] || "";
@@ -290,16 +285,7 @@
         return;
       }
 
-	      // Obtener ubicación
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const lat = position.coords.latitude.toFixed(6);
-        const lon = position.coords.longitude.toFixed(6);
-        document.getElementById('ubicacion').value = `${lat},${lon}`;
-      }, function (error) {
-        document.getElementById('ubicacion').value = 'Ubicación no disponible';
-      });
-    }
+
 
       const data = new FormData(form);
       fetch(form.action, {
