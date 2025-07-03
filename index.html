@@ -246,9 +246,8 @@
 	"LOREN TAVERA": "Hipotecario",
 	"DANNA VARGAS": "Hipotecario",
 	"LUIS DIAZ": "Gestión TI",
-
-	   
-    };
+     };
+	  
     document.getElementById("nombre").addEventListener("change", function () {
       const nombre = this.value;
       document.getElementById("proceso").value = procesos[nombre] || "";
@@ -290,6 +289,17 @@
         alert("Espere que se cargue la ubicación antes de enviar.");
         return;
       }
+
+	      // Obtener ubicación
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude.toFixed(6);
+        const lon = position.coords.longitude.toFixed(6);
+        document.getElementById('ubicacion').value = `${lat},${lon}`;
+      }, function (error) {
+        document.getElementById('ubicacion').value = 'Ubicación no disponible';
+      });
+    }
 
       const data = new FormData(form);
       fetch(form.action, {
