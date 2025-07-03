@@ -243,10 +243,28 @@
 
 	   
     };
-    document.getElementById("nombre").addEventListener("change", function () {
-      const nombre = this.value;
-      document.getElementById("proceso").value = procesos[nombre] || "";
-    });
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
+      return JSON.parse(jsonPayload);
+    }
+
+
+
+    // Obtener ubicación
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude.toFixed(6);
+        const lon = position.coords.longitude.toFixed(6);
+        document.getElementById('ubicacion').value = `${lat},${lon}`;
+      }, function (error) {
+        document.getElementById('ubicacion').value = 'Ubicación no disponible';
+      });
+    }
+
 
     // Hora actual
     function actualizarHora() {
@@ -255,51 +273,37 @@
       document.getElementById("hora").textContent = horaFormateada;
     }
     setInterval(actualizarHora, 1000);
-    actualizarHora();
+    actualizarHora();  
 
-    // Capturar respuesta de Google
-    function handleCredentialResponse(response) {
-      const data = jwt_decode(response.credential);
-      const correo = data.email;
-      const nombre = data.name;
+  // Envío sin redirección
+    document.getElementById("secure-form").addEventListener("submit", function(event) {
+      event.preventDefault(); // Evita la redirección
 
-      document.getElementById("correo").value = correo;
-      document.getElementById("usuarioLogueado").textContent = "Bienvenido, " + nombre + " (" + correo + ")";
-      document.querySelector(".g_id_signin").style.display = "none";
-    }
-
-    // Validación y envío
-    document.getElementById('secure-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const ubicacion = document.getElementById('ubicacion').value;
-      const correo = document.getElementById('correo').value;
-
-      if (!correo) {
-        alert("Por favor, inicia sesión con Google antes de enviar.");
-        return;
-      }
-
-      if (!ubicacion || ubicacion.includes("Error") || ubicacion === "Geolocalización no soportada") {
-        alert("Espere que se cargue la ubicación antes de enviar.");
-        return;
-      }
-
-
-
+      const form = event.target;
       const data = new FormData(form);
+
+      const nombre = data.get("entry.1728467182");
+      const correo = data.get("entry.519463146");
+
+      if (restricciones[nombre] && !restricciones[nombre].map(c => c.toLowerCase()).includes(correo.toLowerCase())) {
+        alert(`Acceso denegado para ${nombre}. Este correo no está autorizado.`);
+        return;
+      }
+
       fetch(form.action, {
-        method: 'POST',
-        mode: 'no-cors',
+        method: "POST",
+        mode: "no-cors", // requerido para Google Forms
         body: data
       }).then(() => {
-        alert("Registro enviado correctamente.");
-        form.reset();
-        document.getElementById("usuarioLogueado").textContent = "";
-        location.reload();
+        alert("Formulario enviado correctamente.");
+        window.location.reload(); // Recarga la página
+      }).catch((error) => {
+        console.error("Error al enviar el formulario:", error);
+        alert("Ocurrió un error al enviar el formulario.");
       });
     });
-  </script>
 
+
+</script>
 </body>
 </html>
